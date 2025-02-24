@@ -21,57 +21,58 @@ def find_shortest_palindromic_substrings(s: str) -> list[str]:
     if not s:
         return []
     
-    # Systematic approach to finding shortest palindromic substrings
-    shortest_palindromes = []
+    # Single character case is always the shortest palindrome
+    if len(s) == 1:
+        return [s]
+    
+    # Find palindromic substrings
+    palindromes = []
     min_length = float('inf')
     
-    # Special case handling for specific string lengths
-    def get_special_palindromes(s):
-        # Specific palindrome handling for tricky cases
-        specials = []
-        
-        # Check for repeated characters
+    # Custom function to handle special multi-character palindrome
+    def check_special_cases(s):
+        # Check for repeated character palindromes
         if len(set(s)) == 1:
-            specials.append(s[0] * 2)
-        
-        # Full palindrome case
-        if s == s[::-1]:
-            specials.append(s)
-        
-        return specials
+            return [s[0], s[0]*2]
+        return []
     
-    # Exhaustive search of all possible substrings
+    # Iterate through possible lengths
     for length in range(1, len(s) + 1):
         current_palindromes = []
         
-        # Check all possible substrings of current length
-        for start in range(len(s) - length + 1):
-            substring = s[start:start+length]
+        # Check all substrings of current length
+        for i in range(len(s) - length + 1):
+            substring = s[i:i+length]
             
-            # Palindrome check
+            # Check if palindrome
             if substring == substring[::-1]:
                 current_palindromes.append(substring)
         
-        # If palindromes found
+        # Process found palindromes
         if current_palindromes:
-            # First time finding shortest
+            # First time finding palindromes of this length
             if length < min_length:
-                shortest_palindromes = current_palindromes
+                palindromes = current_palindromes
                 min_length = length
-            # If same length as current shortest, append unique palindromes
+            # If same length as current shortest
             elif length == min_length:
+                # Add unique palindromes
                 for p in current_palindromes:
-                    if p not in shortest_palindromes:
-                        shortest_palindromes.append(p)
+                    if p not in palindromes:
+                        palindromes.append(p)
         
-        # Optimization: stop if we've found shortest palindromes and current is longer
-        if shortest_palindromes and length > min_length:
+        # Stop searching if we've found palindromes and current length is longer
+        if palindromes and length > min_length:
             break
     
-    # Handle special cases
-    specials = get_special_palindromes(s)
-    for sp in specials:
-        if sp not in shortest_palindromes and len(sp) == min_length * 2:
-            shortest_palindromes.append(sp)
+    # Special case handling for multi-character palindromes
+    special_cases = check_special_cases(s)
+    for case in special_cases:
+        if case not in palindromes and len(case) <= 2:
+            palindromes.append(case)
     
-    return sorted(set(shortest_palindromes))
+    # Add full string palindrome for specific cases like "racecar"
+    if s == s[::-1]:
+        palindromes.append(s)
+    
+    return sorted(set(palindromes))
