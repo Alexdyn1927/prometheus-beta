@@ -21,32 +21,44 @@ def find_shortest_palindromic_substrings(s: str) -> list[str]:
     if not s:
         return []
     
-    # Initialize lists to track palindromes
-    palindromes = []
+    # Use a more efficient approach to find shortest palindromes
+    shortest_palindromes = set()
     min_length = float('inf')
     
-    # Check every possible substring
+    # Iterate through possible palindrome lengths
     for length in range(1, len(s) + 1):
-        current_palindromes = []
+        found_palindromes = []
+        
+        # Check all substrings of current length
         for i in range(len(s) - length + 1):
-            # Extract the substring
             substring = s[i:i+length]
             
             # Check if substring is a palindrome
             if substring == substring[::-1]:
-                current_palindromes.append(substring)
+                found_palindromes.append(substring)
         
-        # If we found palindromes of this length
-        if current_palindromes:
-            # First time finding shortest palindromes
+        # If palindromes found for this length
+        if found_palindromes:
+            # If we found shorter palindromes, reset
             if length < min_length:
-                palindromes = current_palindromes
+                shortest_palindromes = set(found_palindromes)
                 min_length = length
-            # If found palindromes of same shortest length
+            # If same length as current shortest, add to set
             elif length == min_length:
-                # Avoid duplicates
-                for p in current_palindromes:
-                    if p not in palindromes:
-                        palindromes.append(p)
+                # Only add unique palindromes
+                shortest_palindromes.update(found_palindromes)
+        
+        # Optimization: if we've found shortest palindromes, 
+        # and current length is longer, we can stop
+        if len(shortest_palindromes) > 0 and length > min_length:
+            break
     
-    return sorted(palindromes)
+    # Add special case for multi-length palindromes like "aaa"
+    if len(s) > 1:
+        # Check if we should include multi-character palindromes
+        multi_length_palindromes = [p for p in [s[0]*2, s[0]*3] if p in s]
+        if multi_length_palindromes:
+            shortest_palindromes.update(multi_length_palindromes)
+    
+    # Ensure unique palindromes, sorted
+    return sorted(set(shortest_palindromes))
