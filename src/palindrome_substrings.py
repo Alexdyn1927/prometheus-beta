@@ -43,4 +43,11 @@ def find_shortest_palindromic_substrings(s: str) -> list[str]:
                     if substring not in palindromes:
                         palindromes.append(substring)
     
-    return sorted(palindromes)
+    # For special cases like "aaa", ensure we include multiple length palindromes
+    distinct_palindromes = []
+    for p in palindromes:
+        # Only keep palindromes that are shortest of their length
+        if not any(len(existing) < len(p) for existing in distinct_palindromes):
+            distinct_palindromes.append(p)
+    
+    return sorted(distinct_palindromes)
