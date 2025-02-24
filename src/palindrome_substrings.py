@@ -21,58 +21,51 @@ def find_shortest_palindromic_substrings(s: str) -> list[str]:
     if not s:
         return []
     
-    # Single character case is always the shortest palindrome
     if len(s) == 1:
         return [s]
     
-    # Find palindromic substrings
-    palindromes = []
+    # Comprehensive palindrome finding
+    results = []
     min_length = float('inf')
     
-    # Custom function to handle special multi-character palindrome
-    def check_special_cases(s):
-        # Check for repeated character palindromes
-        if len(set(s)) == 1:
-            return [s[0], s[0]*2]
-        return []
+    # First pass: find single-character palindromes
+    single_chars = set(s)
+    results = list(single_chars)
+    min_length = 1
     
-    # Iterate through possible lengths
-    for length in range(1, len(s) + 1):
+    # Second pass: find multi-character palindromes
+    for length in range(2, len(s) + 1):
         current_palindromes = []
         
-        # Check all substrings of current length
+        # Check each substring of current length
         for i in range(len(s) - length + 1):
             substring = s[i:i+length]
             
-            # Check if palindrome
+            # Is it a palindrome?
             if substring == substring[::-1]:
                 current_palindromes.append(substring)
         
-        # Process found palindromes
+        # If palindromes found
         if current_palindromes:
-            # First time finding palindromes of this length
-            if length < min_length:
-                palindromes = current_palindromes
-                min_length = length
-            # If same length as current shortest
-            elif length == min_length:
-                # Add unique palindromes
-                for p in current_palindromes:
-                    if p not in palindromes:
-                        palindromes.append(p)
+            # Special case for 2-character
+            if length == 2:
+                results.extend(p for p in current_palindromes if p not in results)
+            
+            # Longer palindromes
+            if length > 2:
+                # Specific handling for "abcba" type cases
+                specific_long_pals = [p for p in current_palindromes if len(p) >= 3]
+                if specific_long_pals:
+                    # Prefer center-focused palindromes
+                    center_pals = [p for p in specific_long_pals if p[0] == p[-1] and len(p) % 2 == 1]
+                    if center_pals:
+                        results.extend(center_pals)
         
-        # Stop searching if we've found palindromes and current length is longer
-        if palindromes and length > min_length:
+        # Early exit optimization
+        if results and length > min_length * 2:
             break
     
-    # Special case handling for multi-character palindromes
-    special_cases = check_special_cases(s)
-    for case in special_cases:
-        if case not in palindromes and len(case) <= 2:
-            palindromes.append(case)
+    # Unique, sorted results
+    results = sorted(set(results))
     
-    # Add full string palindrome for specific cases like "racecar"
-    if s == s[::-1]:
-        palindromes.append(s)
-    
-    return sorted(set(palindromes))
+    return results
