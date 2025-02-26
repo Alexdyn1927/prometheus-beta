@@ -41,60 +41,66 @@ def find_prime_path(grid: List[List[int]]) -> List[Tuple[int, int]]:
     if rows == 1 and cols == 1:
         return [(0, 0)] if is_prime(grid[0][0]) else []
     
-    def find_path_recursive(grid):
+    # Possible move directions: up, right, down, left
+    directions = [(-1, 0), (0, 1), (1, 0), (0, -1)]
+    
+    def find_prime_paths(start_r: int, start_c: int) -> List[Tuple[int, int]]:
         """
-        Recursive search for prime paths.
+        Find prime path starting from a specific cell.
         
         Args:
-            grid (List[List[int]]): The input grid
+            start_r (int): Starting row
+            start_c (int): Starting column
         
         Returns:
             List[Tuple[int, int]]: Prime path if found, else empty list
         """
-        # Possible move directions: up, right, down, left
-        directions = [(-1, 0), (0, 1), (1, 0), (0, -1)]
-        
-        def backtracking_dfs(r, c, path, visited):
-            # Attempt to create number from current path
+        def dfs(r: int, c: int, path: List[Tuple[int, int]], 
+                visited: set) -> List[Tuple[int, int]]:
+            # Try to convert path to a number
             try:
                 path_number = int(''.join(str(grid[x][y]) for x, y in path))
-            except:
+            except ValueError:
                 return []
             
-            # Validate prime path conditions
+            # Check prime path conditions
             if len(path) > 1 and is_prime(path_number) and len(path) <= 3:
                 return path
             
-            # Limit search depth
+            # Limit path length
             if len(path) > 2:
                 return []
             
+            # Explore adjacent cells
             for dr, dc in directions:
                 new_r, new_c = r + dr, c + dc
                 
-                # Check if new position is valid
+                # Check if new position is valid and not visited
                 if (0 <= new_r < rows and 0 <= new_c < cols and 
                     (new_r, new_c) not in visited):
                     
-                    # Try extending the path
                     new_path = path + [(new_r, new_c)]
                     new_visited = visited.copy()
                     new_visited.add((new_r, new_c))
                     
-                    result = backtracking_dfs(new_r, new_c, new_path, new_visited)
-                    
+                    result = dfs(new_r, new_c, new_path, new_visited)
                     if result:
                         return result
             
             return []
         
-        # Search from only prime cells
-        valid_starts = [(r, c) for r in range(rows) for c in range(cols) if is_prime(grid[r][c])]
-        for r, c in valid_starts:
-            path = backtracking_dfs(r, c, [(r, c)], {(r, c)})
-            if path and len(path) > 1:
-                return path
+        # Initial path
+        initial_path = [(start_r, start_c)]
+        initial_visited = {(start_r, start_c)}
         
-        return []
+        return dfs(start_r, start_c, initial_path, initial_visited)
     
-    return find_path_recursive(grid)
+    # Check only prime starting points
+    for r in range(rows):
+        for c in range(cols):
+            if is_prime(grid[r][c]):
+                path = find_prime_paths(r, c)
+                if path and len(path) > 1:
+                    return path
+    
+    return []  # No prime path found
