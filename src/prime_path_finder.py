@@ -90,8 +90,12 @@ def find_prime_path(grid: List[List[int]]) -> List[Tuple[int, int]]:
     # Try starting the path from each cell
     for r in range(rows):
         for c in range(cols):
+            # Skip if the starting cell is not prime
+            if not is_prime(grid[r][c]):
+                continue
+            
             path = dfs(r, c, [(r, c)], {(r, c)})
-            if path:
+            if path and is_prime(int(''.join(str(grid[x][y]) for x, y in path))):
                 return path
     
     return []  # No prime path found
