@@ -37,6 +37,10 @@ def find_prime_path(grid: List[List[int]]) -> List[Tuple[int, int]]:
     
     rows, cols = len(grid), len(grid[0])
     
+    # Special case: single cell grid
+    if rows == 1 and cols == 1:
+        return [(0, 0)] if is_prime(grid[0][0]) else []
+    
     def dfs(r: int, c: int, current_path: List[Tuple[int, int]], 
             visited: set) -> List[Tuple[int, int]]:
         """
@@ -51,10 +55,6 @@ def find_prime_path(grid: List[List[int]]) -> List[Tuple[int, int]]:
         Returns:
             List[Tuple[int, int]]: Prime path if found, else empty list
         """
-        # Special case: single prime cell
-        if len(grid) == 1 and len(grid[0]) == 1 and is_prime(grid[0][0]):
-            return [(0, 0)]
-        
         # Check if current cell forms a valid prime number
         current_number = int(''.join(str(grid[x][y]) for x, y in current_path))
         
@@ -90,10 +90,15 @@ def find_prime_path(grid: List[List[int]]) -> List[Tuple[int, int]]:
     # Try starting the path from each cell that is prime
     for r in range(rows):
         for c in range(cols):
-            # Start only from prime cells
-            if is_prime(grid[r][c]):
-                path = dfs(r, c, [(r, c)], {(r, c)})
-                if path and len(path) > 1 and is_prime(int(''.join(str(grid[x][y]) for x, y in path))):
-                    return path
+            # Try paths with and without adjacency
+            single_cell_path = [(r, c)] if is_prime(grid[r][c]) else []
+            
+            if single_cell_path:
+                return single_cell_path
+            
+            # Check for multi-cell paths
+            path = dfs(r, c, [(r, c)], {(r, c)})
+            if path and len(path) > 1 and is_prime(int(''.join(str(grid[x][y]) for x, y in path))):
+                return path
     
     return []  # No prime path found
