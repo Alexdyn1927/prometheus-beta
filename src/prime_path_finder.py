@@ -51,14 +51,20 @@ def find_prime_path(grid: List[List[int]]) -> List[Tuple[int, int]]:
         Returns:
             List[Tuple[int, int]]: Prime path if found, else empty list
         """
+        # Special case: single prime cell
+        if len(grid) == 1 and len(grid[0]) == 1 and is_prime(grid[0][0]):
+            return [(0, 0)]
+        
         # Check if current cell forms a valid prime number
         current_number = int(''.join(str(grid[x][y]) for x, y in current_path))
-        if not is_prime(current_number):
-            return []
         
         # If path is longer than 1 and prime, return the path
         if len(current_path) > 1 and is_prime(current_number):
             return current_path
+        
+        # If path is not yet prime or too short, continue searching
+        if not is_prime(current_number):
+            return []
         
         # Possible move directions: up, right, down, left
         directions = [(-1, 0), (0, 1), (1, 0), (0, -1)]
