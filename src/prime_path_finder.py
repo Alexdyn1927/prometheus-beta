@@ -55,10 +55,8 @@ def find_prime_path(grid: List[List[int]]) -> List[Tuple[int, int]]:
         """
         # Possible move directions: up, right, down, left
         directions = [(-1, 0), (0, 1), (1, 0), (0, -1)]
-        visited = set([(start_r, start_c)])
         
-        # All possible paths
-        def dfs(r, c, path):
+        def backtracking_dfs(r, c, path, max_additional_cells=2):
             # Convert path to number
             path_number = int(''.join(str(grid[x][y]) for x, y in path))
             
@@ -66,30 +64,28 @@ def find_prime_path(grid: List[List[int]]) -> List[Tuple[int, int]]:
             if len(path) > 1 and is_prime(path_number):
                 return path
             
+            # Limit additional cells to prevent too long paths
+            if len(path) > max_additional_cells:
+                return []
+            
             for dr, dc in directions:
                 new_r, new_c = r + dr, c + dc
                 
                 # Check if new position is valid and not visited
                 if (0 <= new_r < rows and 0 <= new_c < cols and 
-                    (new_r, new_c) not in visited):
-                    
-                    # Temporarily mark as visited
-                    visited.add((new_r, new_c))
+                    (new_r, new_c) not in path):
                     
                     # Try extending the path
                     new_path = path + [(new_r, new_c)]
-                    result = dfs(new_r, new_c, new_path)
+                    result = backtracking_dfs(new_r, new_c, new_path)
                     
                     # If a path is found, return it
                     if result:
                         return result
-                    
-                    # Backtrack
-                    visited.remove((new_r, new_c))
             
             return []
         
-        return dfs(start_r, start_c, [(start_r, start_c)])
+        return backtracking_dfs(start_r, start_c, [(start_r, start_c)])
     
     # Exhaustive search for prime paths
     for r in range(rows):
