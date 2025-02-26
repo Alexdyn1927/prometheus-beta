@@ -47,7 +47,7 @@ def test_find_prime_path_no_prime_path():
         [1, 5, 3]
     ]
     path = find_prime_path(grid)
-    assert not path  # Explicitly checking for emptiness
+    assert path == [], f"Expected empty path, but got {path}"
 
 def test_find_prime_path_empty_grid():
     """Test handling of empty grid."""
