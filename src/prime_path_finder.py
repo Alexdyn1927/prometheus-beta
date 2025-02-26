@@ -62,11 +62,11 @@ def find_prime_path(grid: List[List[int]]) -> List[Tuple[int, int]]:
                 return []
             
             # Validate prime path conditions
-            if len(path) > 1 and is_prime(path_number):
+            if len(path) > 1 and is_prime(path_number) and len(path) <= 3:
                 return path
             
             # Limit search depth
-            if len(path) > 3:
+            if len(path) > 2:
                 return []
             
             for dr, dc in directions:
@@ -88,13 +88,12 @@ def find_prime_path(grid: List[List[int]]) -> List[Tuple[int, int]]:
             
             return []
         
-        # Search from each prime cell
-        for r in range(rows):
-            for c in range(cols):
-                if is_prime(grid[r][c]):
-                    path = backtracking_dfs(r, c, [(r, c)], {(r, c)})
-                    if path and len(path) > 1:
-                        return path
+        # Search from only prime cells
+        valid_starts = [(r, c) for r in range(rows) for c in range(cols) if is_prime(grid[r][c])]
+        for r, c in valid_starts:
+            path = backtracking_dfs(r, c, [(r, c)], {(r, c)})
+            if path and len(path) > 1:
+                return path
         
         return []
     
