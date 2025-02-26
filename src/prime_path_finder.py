@@ -41,64 +41,68 @@ def find_prime_path(grid: List[List[int]]) -> List[Tuple[int, int]]:
     if rows == 1 and cols == 1:
         return [(0, 0)] if is_prime(grid[0][0]) else []
     
-    def dfs(r: int, c: int, current_path: List[Tuple[int, int]], 
-            visited: set) -> List[Tuple[int, int]]:
+    def find_path_recursive(grid, start_r, start_c):
         """
-        Depth-first search to find prime number path.
+        Recursive helper to find a valid prime path.
         
         Args:
-            r (int): Current row
-            c (int): Current column
-            current_path (List[Tuple[int, int]]): Current path of coordinates
-            visited (set): Set of visited coordinates
+            grid (List[List[int]]): The input grid
+            start_r (int): Starting row
+            start_c (int): Starting column
         
         Returns:
             List[Tuple[int, int]]: Prime path if found, else empty list
         """
-        # Check if current cell forms a valid prime number
-        current_number = int(''.join(str(grid[x][y]) for x, y in current_path))
-        
-        # If path is longer than 1 and prime, return the path
-        if len(current_path) > 1 and is_prime(current_number):
-            return current_path
-        
-        # If path is not yet prime or too short, continue searching
-        if not is_prime(current_number):
-            return []
-        
         # Possible move directions: up, right, down, left
         directions = [(-1, 0), (0, 1), (1, 0), (0, -1)]
+        visited = set([(start_r, start_c)])
         
-        for dr, dc in directions:
-            new_r, new_c = r + dr, c + dc
+        # All possible paths
+        def dfs(r, c, path):
+            # Convert path to number
+            path_number = int(''.join(str(grid[x][y]) for x, y in path))
             
-            # Check if new position is valid
-            if (0 <= new_r < rows and 0 <= new_c < cols and 
-                (new_r, new_c) not in visited):
+            # If path is longer than 1 and prime, it's a candidate
+            if len(path) > 1 and is_prime(path_number):
+                return path
+            
+            for dr, dc in directions:
+                new_r, new_c = r + dr, c + dc
                 
-                new_path = current_path + [(new_r, new_c)]
-                new_visited = visited.copy()
-                new_visited.add((new_r, new_c))
-                
-                # Recursive search
-                result = dfs(new_r, new_c, new_path, new_visited)
-                if result:
-                    return result
+                # Check if new position is valid and not visited
+                if (0 <= new_r < rows and 0 <= new_c < cols and 
+                    (new_r, new_c) not in visited):
+                    
+                    # Temporarily mark as visited
+                    visited.add((new_r, new_c))
+                    
+                    # Try extending the path
+                    new_path = path + [(new_r, new_c)]
+                    result = dfs(new_r, new_c, new_path)
+                    
+                    # If a path is found, return it
+                    if result:
+                        return result
+                    
+                    # Backtrack
+                    visited.remove((new_r, new_c))
+            
+            return []
         
-        return []
+        return dfs(start_r, start_c, [(start_r, start_c)])
     
-    # Try starting the path from each cell that is prime
+    # Exhaustive search for prime paths
     for r in range(rows):
         for c in range(cols):
-            # Try paths with and without adjacency
-            single_cell_path = [(r, c)] if is_prime(grid[r][c]) else []
+            # Skip non-prime starting cells
+            if not is_prime(grid[r][c]):
+                continue
             
-            if single_cell_path:
-                return single_cell_path
+            # Try finding path
+            path = find_path_recursive(grid, r, c)
             
-            # Check for multi-cell paths
-            path = dfs(r, c, [(r, c)], {(r, c)})
-            if path and len(path) > 1 and is_prime(int(''.join(str(grid[x][y]) for x, y in path))):
+            # Validate and return if path found
+            if path and len(path) > 1:
                 return path
     
     return []  # No prime path found
