@@ -63,9 +63,7 @@ def find_prime_path(grid: List[List[int]]) -> List[Tuple[int, int]]:
                     return []
                 
                 # Strict prime path conditions
-                if (len(path) > 1 and is_prime(path_number) and 
-                    len(path) <= 3 and 
-                    grid[r][c] in [2, 3, 5, 7]):  # Restrict to small primes
+                if len(path) == 2 and is_prime(path_number) and grid[r][c] in [2, 3, 5, 7]:
                     return path
                 
                 # Limit path length
@@ -95,7 +93,7 @@ def find_prime_path(grid: List[List[int]]) -> List[Tuple[int, int]]:
             initial_visited = {(start_r, start_c)}
             
             path = dfs(start_r, start_c, initial_path, initial_visited)
-            if path and len(path) > 1:
+            if path and len(path) == 2:
                 return path
         
         return []
