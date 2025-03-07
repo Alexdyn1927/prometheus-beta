@@ -27,17 +27,17 @@ def to_alternating_case(text: str) -> str:
     if not text:
         return text
     
-    # Split into words to preserve spacing
-    words = text.split()
+    # Iterate through characters keeping track of letter index
+    result = []
+    letter_index = 0
     
-    # Convert each word with alternating case
-    alternating_words = [
-        ''.join(
-            char.upper() if idx % 2 == 0 else char.lower() 
-            for idx, char in enumerate(word)
-        ) 
-        for word in words
-    ]
+    for char in text:
+        if char.isalpha():
+            # Alternate case for letters
+            result.append(char.upper() if letter_index % 2 == 0 else char.lower())
+            letter_index += 1
+        else:
+            # Non-alphabetic characters remain unchanged
+            result.append(char)
     
-    # Rejoin the words
-    return ' '.join(alternating_words)
+    return ''.join(result)
