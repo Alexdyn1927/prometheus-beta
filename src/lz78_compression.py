@@ -31,30 +31,27 @@ def lz78_compress(input_string: str) -> List[Tuple[int, str]]:
         return []
     
     # Initialize dictionary and compression result
-    dictionary = {0: ""}
+    dictionary = {"": 0}
     compressed = []
     current_index = 1
     
-    # Current prefix to search in dictionary
+    # Current prefix to match
     current_prefix = ""
     
     # Iterate through each character in the input string
     for char in input_string:
         # Attempt to extend current prefix
-        current_search = current_prefix + char
+        test_prefix = current_prefix + char
         
-        # If current search is in dictionary, update current prefix
-        if current_search in dictionary.values():
-            current_prefix = current_search
+        # If we've seen this prefix before, update current prefix
+        if test_prefix in dictionary:
+            current_prefix = test_prefix
         else:
-            # Find the index of the current prefix
-            prefix_index = next((k for k, v in dictionary.items() if v == current_prefix), 0)
+            # Output current index and character for this new sequence
+            compressed.append((dictionary[current_prefix], char))
             
-            # Add to compressed output
-            compressed.append((prefix_index, char))
-            
-            # Add to dictionary
-            dictionary[current_index] = current_search
+            # Add this new sequence to dictionary
+            dictionary[test_prefix] = current_index
             current_index += 1
             
             # Reset current prefix
@@ -62,8 +59,7 @@ def lz78_compress(input_string: str) -> List[Tuple[int, str]]:
     
     # Handle any remaining prefix
     if current_prefix:
-        prefix_index = next((k for k, v in dictionary.items() if v == current_prefix), 0)
-        compressed.append((prefix_index, ''))
+        compressed.append((dictionary[current_prefix], ''))
     
     return compressed
 
@@ -80,32 +76,36 @@ def lz78_decompress(compressed_data: List[Tuple[int, str]]) -> str:
     
     Raises:
         TypeError: If input is not a list of tuples
+        ValueError: If input contains invalid compression data
     """
     # Input validation
     if not isinstance(compressed_data, list):
         raise TypeError("Input must be a list of tuples")
     
-    # Handle empty input
+    # Handle empty input 
     if not compressed_data:
         return ""
     
-    # Initialize dictionary and decompressed string
+    # Initialize dictionary and result
     dictionary = {0: ""}
-    decompressed = []
+    result = []
     current_index = 1
     
     # Decompress each tuple
     for idx, char in compressed_data:
-        # Get the prefix from dictionary
-        prefix = dictionary.get(idx, "")
+        # Validate index exists in dictionary
+        if idx not in dictionary:
+            raise ValueError(f"Invalid compression data: index {idx} not found")
         
-        # Construct current string
+        # Get the prefix string from dictionary
+        prefix = dictionary[idx]
+        
+        # Construct current string 
         current_string = prefix + char
-        decompressed.append(current_string)
+        result.append(current_string)
         
-        # Add to dictionary if not the first entry
-        if idx != 0:
-            dictionary[current_index] = current_string
-            current_index += 1
+        # Add new entry to dictionary
+        dictionary[current_index] = current_string
+        current_index += 1
     
-    return ''.join(decompressed)
+    return ''.join(result)
