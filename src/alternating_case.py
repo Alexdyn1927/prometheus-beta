@@ -13,7 +13,7 @@ def to_alternating_case(text: str) -> str:
     
     Examples:
         >>> to_alternating_case("hello world")
-        'Hello wOrLd'
+        'HeLlO wOrLd'
         >>> to_alternating_case("")
         ''
         >>> to_alternating_case("a")
@@ -27,8 +27,17 @@ def to_alternating_case(text: str) -> str:
     if not text:
         return text
     
-    # Convert to alternating case
-    return ''.join(
-        char.upper() if idx % 2 == 0 else char.lower() 
-        for idx, char in enumerate(text)
-    )
+    # Split into words to preserve spacing
+    words = text.split()
+    
+    # Convert each word with alternating case
+    alternating_words = [
+        ''.join(
+            char.upper() if idx % 2 == 0 else char.lower() 
+            for idx, char in enumerate(word)
+        ) 
+        for word in words
+    ]
+    
+    # Rejoin the words
+    return ' '.join(alternating_words)
