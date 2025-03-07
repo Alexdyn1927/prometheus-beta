@@ -28,7 +28,7 @@ def lzc_compress(input_data):
     # Initialize compression dictionary and variables
     dictionary = {bytes([i]): i for i in range(256)}
     next_code = 256
-    max_dict_size = 65536  # Limit dictionary size to 16-bit codes
+    max_dict_size = 4096  # Reduce dictionary size to ensure compression
     
     # Compression variables
     result = bytearray()
@@ -83,38 +83,57 @@ def lzc_decompress(compressed_data):
     if len(compressed_data) % 2 != 0:
         raise ValueError("Compressed data must have an even length")
     
+    # Limit dictionary size and code range
+    max_dict_size = 4096
+    
     # Initialize decompression dictionary
     dictionary = {i: bytes([i]) for i in range(256)}
     next_code = 256
-    max_dict_size = 65536  # Limit dictionary size to 16-bit codes
     
     # Decompression variables
     result = bytearray()
-    previous_code = int.from_bytes(compressed_data[:2], 'big')
-    result.extend(dictionary[previous_code])
+    
+    # Ensure the first code is valid
+    try:
+        previous_code = int.from_bytes(compressed_data[:2], 'big')
+        # Verify the first code is in the dictionary
+        if previous_code >= 256:
+            raise ValueError("Invalid compressed data")
+        
+        result.extend(dictionary[previous_code])
+    except Exception:
+        raise ValueError("Invalid compressed data")
     
     # Decompress the data
     for i in range(2, len(compressed_data), 2):
-        current_code = int.from_bytes(compressed_data[i:i+2], 'big')
+        try:
+            current_code = int.from_bytes(compressed_data[i:i+2], 'big')
+            
+            # Handle invalid codes
+            if current_code >= max_dict_size:
+                raise ValueError("Invalid compressed data")
+            
+            # Retrieve current sequence
+            if current_code in dictionary:
+                current_sequence = dictionary[current_code]
+            elif current_code == next_code:
+                # Special case: code not yet in dictionary
+                current_sequence = dictionary[previous_code] + bytes([dictionary[previous_code][0]])
+            else:
+                raise ValueError("Invalid compressed data")
+            
+            # Add current sequence to result
+            result.extend(current_sequence)
+            
+            # Add new dictionary entry if not full
+            if next_code < max_dict_size:
+                dictionary[next_code] = dictionary[previous_code] + bytes([current_sequence[0]])
+                next_code += 1
+            
+            # Update previous code
+            previous_code = current_code
         
-        # Retrieve current sequence
-        if current_code in dictionary:
-            current_sequence = dictionary[current_code]
-        elif current_code == next_code:
-            # Special case: code not yet in dictionary
-            current_sequence = dictionary[previous_code] + bytes([dictionary[previous_code][0]])
-        else:
-            raise ValueError(f"Invalid compressed data at index {i}")
-        
-        # Add current sequence to result
-        result.extend(current_sequence)
-        
-        # Add new dictionary entry if not full
-        if next_code < max_dict_size:
-            dictionary[next_code] = dictionary[previous_code] + bytes([current_sequence[0]])
-            next_code += 1
-        
-        # Update previous code
-        previous_code = current_code
+        except Exception:
+            raise ValueError("Invalid compressed data")
     
     return result
