@@ -7,7 +7,7 @@ def test_positive_numbers():
 
 def test_mixed_numbers():
     """Test with a mix of positive and negative numbers."""
-    assert find_max_subarray_sum([1, -2, 3, 4, -1, 2, 1, -5, 4]) == 10
+    assert find_max_subarray_sum([1, -2, 3, 4, -1, 2, 1, -5, 4]) == 9
 
 def test_all_negative_numbers():
     """Test with an array of all negative numbers."""
