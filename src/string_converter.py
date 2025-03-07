@@ -1,3 +1,5 @@
+import re
+
 def to_kebab_case(input_string):
     """
     Convert a given string to kebab-case.
@@ -29,21 +31,13 @@ def to_kebab_case(input_string):
     if not input_string:
         return ""
     
-    # Convert to lowercase first
-    normalized = input_string.lower()
+    # Replace various separators with spaces first
+    normalized = input_string.replace('_', ' ').replace('-', ' ')
     
-    # Replace various separators with hyphens
-    normalized = normalized.replace('_', '-').replace(' ', '-')
+    # Use regex to split camel case and handle consecutive uppercase
+    # This breaks the string at points where a lowercase letter is followed by an uppercase letter
+    # or where multiple uppercase letters exist
+    words = re.findall(r'[A-Z]?[a-z]+|[A-Z]+(?=[A-Z][a-z]|\d|\W|$)|\d+', normalized)
     
-    # Handle camelCase or PascalCase
-    # Use regex-like replacement to insert hyphens before capital letters
-    chars = []
-    for i, char in enumerate(normalized):
-        if i > 0 and char.isalpha() and char.isupper():
-            chars.append('-')
-        chars.append(char.lower())
-    
-    # Remove consecutive hyphens and trim any leading/trailing hyphens
-    result = ''.join(chars).replace('--', '-').strip('-')
-    
-    return result
+    # Convert to lowercase and join with hyphens
+    return '-'.join(word.lower() for word in words).strip('-')
