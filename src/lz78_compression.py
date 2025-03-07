@@ -21,17 +21,17 @@ def lz78_compress(input_string: str) -> List[Tuple[int, str]]:
         
     Raises:
         TypeError: If input is not a string
-        ValueError: If input string is empty
     """
     # Input validation
     if not isinstance(input_string, str):
         raise TypeError("Input must be a string")
     
+    # Handle empty string as a special case
     if not input_string:
-        raise ValueError("Input string cannot be empty")
+        return []
     
     # Initialize dictionary and compression result
-    dictionary = {}
+    dictionary = {0: ""}
     compressed = []
     current_index = 1
     
@@ -44,16 +44,17 @@ def lz78_compress(input_string: str) -> List[Tuple[int, str]]:
         current_search = current_prefix + char
         
         # If current search is in dictionary, update current prefix
-        if current_search in dictionary:
+        if current_search in dictionary.values():
             current_prefix = current_search
         else:
-            # If not in dictionary, add new entry
-            # Find the index of the current prefix or 0 if not found
-            prefix_index = dictionary.get(current_prefix, 0)
+            # Find the index of the current prefix
+            prefix_index = next((k for k, v in dictionary.items() if v == current_prefix), 0)
             
-            # Add to compressed output and dictionary
+            # Add to compressed output
             compressed.append((prefix_index, char))
-            dictionary[current_search] = current_index
+            
+            # Add to dictionary
+            dictionary[current_index] = current_search
             current_index += 1
             
             # Reset current prefix
@@ -61,7 +62,8 @@ def lz78_compress(input_string: str) -> List[Tuple[int, str]]:
     
     # Handle any remaining prefix
     if current_prefix:
-        compressed.append((dictionary.get(current_prefix, 0), ''))
+        prefix_index = next((k for k, v in dictionary.items() if v == current_prefix), 0)
+        compressed.append((prefix_index, ''))
     
     return compressed
 
@@ -78,12 +80,12 @@ def lz78_decompress(compressed_data: List[Tuple[int, str]]) -> str:
     
     Raises:
         TypeError: If input is not a list of tuples
-        ValueError: If input contains invalid compression data
     """
     # Input validation
     if not isinstance(compressed_data, list):
         raise TypeError("Input must be a list of tuples")
     
+    # Handle empty input
     if not compressed_data:
         return ""
     
@@ -95,10 +97,7 @@ def lz78_decompress(compressed_data: List[Tuple[int, str]]) -> str:
     # Decompress each tuple
     for idx, char in compressed_data:
         # Get the prefix from dictionary
-        prefix = dictionary.get(idx, None)
-        
-        if prefix is None:
-            raise ValueError(f"Invalid compression data: index {idx} not found")
+        prefix = dictionary.get(idx, "")
         
         # Construct current string
         current_string = prefix + char
@@ -106,7 +105,7 @@ def lz78_decompress(compressed_data: List[Tuple[int, str]]) -> str:
         
         # Add to dictionary if not the first entry
         if idx != 0:
-            dictionary[current_index] = prefix + char[0]
+            dictionary[current_index] = current_string
             current_index += 1
     
     return ''.join(decompressed)
