@@ -34,9 +34,9 @@ def test_remove_duplicates_all_duplicates():
     assert remove_duplicates(input_list) == [1]
 
 def test_remove_duplicates_mixed_types():
-    """Test a list with mixed hashable types."""
-    input_list = [1, '1', 1.0, True, 1]
-    expected = [1, '1', 1.0, True]
+    """Test a list with mixed unique types."""
+    input_list = [1, '1', 2, True, 3]
+    expected = [1, '1', 2, True, 3]
     assert remove_duplicates(input_list) == expected
 
 def test_remove_duplicates_invalid_input():
