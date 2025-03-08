@@ -48,8 +48,8 @@ def advanced_string_reversal(input_string):
         # Default: return as-is
         return s
     
-    # Split the string into substrings including numbers
-    pattern = r'(\d+|\w+|\W+)'
+    # More granular split to capture words, numbers, and other parts
+    pattern = r'((?:\d+)|(?:\w+)|(?:\W+))'
     substrings = re.findall(pattern, input_string)
     
     # Process each substring
