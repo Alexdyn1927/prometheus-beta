@@ -6,7 +6,7 @@ def find_max_consecutive_product(arr):
         arr (list): A list of integers, can include positive, negative, and zero values.
     
     Returns:
-        int or float: The maximum product of three consecutive elements.
+        int or float: The absolute maximum product of three consecutive elements.
     
     Raises:
         ValueError: If the input array has fewer than 3 elements.
@@ -18,13 +18,13 @@ def find_max_consecutive_product(arr):
     if len(arr) < 3:
         raise ValueError("Array must contain at least 3 elements")
     
-    # Initialize max product with first three elements
-    max_product = arr[0] * arr[1] * arr[2]
+    # Initialize max product with absolute value of first three elements
+    max_product = abs(arr[0] * arr[1] * arr[2])
     
     # Iterate through the array to find maximum product
     for i in range(1, len(arr) - 2):
-        # Calculate current consecutive product
-        current_product = arr[i] * arr[i+1] * arr[i+2]
+        # Calculate current consecutive product and take absolute value
+        current_product = abs(arr[i] * arr[i+1] * arr[i+2])
         
         # Update max_product if current_product is larger
         max_product = max(max_product, current_product)
