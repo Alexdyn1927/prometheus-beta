@@ -24,7 +24,7 @@ def test_all_negative_array():
 def test_mixed_sign_array():
     """Test array with mixed positive, negative, and zero values"""
     arr = [-3, 1, 2, -1, 4, 0, 5]
-    assert find_max_consecutive_product(arr) == 8  # 2 * 4 * 1
+    assert find_max_consecutive_product(arr) == 8  # 2 * 4 * 1 is the highest consecutive product
 
 def test_minimum_array_length():
     """Test array with exactly 3 elements"""
