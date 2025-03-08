@@ -18,4 +18,4 @@ def subtract_arrays(A, B):
         raise ValueError("Both input arrays must be of length 10")
     
     # Compute result array in O(n) time
-    return [max(0, (a - b + 10) % 10) for a, b in zip(A, B)]
+    return [max(0, (a - b) % 10) for a, b in zip(A, B)]
