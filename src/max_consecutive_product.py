@@ -23,17 +23,10 @@ def find_max_consecutive_product(arr):
     
     # Iterate through the array to find maximum product
     for i in range(1, len(arr) - 2):
-        # Calculate current sub-array products, consider all possible sign combinations
-        products = [
-            arr[i] * arr[i+1] * arr[i+2],        # Straight multiplication
-            arr[i] * arr[i+1] * arr[i+2],        # Normal order
-            arr[i] * arr[i+2] * arr[i+1],        # Rotated order 1
-            arr[i+1] * arr[i] * arr[i+2],        # Rotated order 2
-            arr[i+1] * arr[i+2] * arr[i],        # Rotated order 3
-            arr[i+2] * arr[i] * arr[i+1]         # Rotated order 4
-        ]
+        # Calculate current three consecutive products
+        current_product = arr[i] * arr[i+1] * arr[i+2]
         
-        # Update max_product with the highest product
-        max_product = max(max_product, max(products))
+        # Update max_product if current_product is larger
+        max_product = max(max_product, current_product)
     
     return max_product
