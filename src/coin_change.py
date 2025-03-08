@@ -37,7 +37,8 @@ def min_coins(coins, amount):
         for coin in sorted(coins):  # Sort in ascending order
             if coin <= i:
                 # Update minimum coins needed
-                dp[i] = min(dp[i], dp[i - coin] + 1)
+                candidate = dp[i - coin] + 1
+                dp[i] = min(dp[i], candidate)
     
     # Return result, -1 if amount cannot be made
     return dp[amount] if dp[amount] != float('inf') else -1
