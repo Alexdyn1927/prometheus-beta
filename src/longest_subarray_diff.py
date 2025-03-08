@@ -25,16 +25,23 @@ def longest_subarray_diff(A, k):
     
     # Initialize variables for sliding window
     max_length = 1
-    start = 0
+    n = len(A)
     
-    # Iterate through the array
-    for end in range(1, len(A)):
-        # If the condition is violated, move the start pointer
-        while start < end and abs(A[end] - A[end-1]) < k:
-            start = end
-        
-        # Update maximum length
-        current_length = end - start + 1
-        max_length = max(max_length, current_length)
+    # Try different subarray lengths in descending order
+    for length in range(n, 1, -1):
+        # Slide a window of current length
+        for start in range(n - length + 1):
+            # Check if this subarray satisfies the condition
+            valid_subarray = True
+            for j in range(start + 1, start + length):
+                # If any two adjacent elements don't meet the condition
+                if abs(A[j] - A[j-1]) < k:
+                    valid_subarray = False
+                    break
+            
+            # If entire subarray is valid, return its length
+            if valid_subarray:
+                return length
     
-    return max_length
+    # If no valid subarray found, return 1
+    return 1
