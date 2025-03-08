@@ -27,6 +27,10 @@ def advanced_string_reversal(input_string):
         """Check if a string contains only letters."""
         return s.isalpha()
     
+    def is_number(s):
+        """Check if a string contains only digits."""
+        return s.isdigit()
+    
     def reverse_substring(s):
         """Reverse a substring based on its characteristics."""
         # If it's a palindrome, return as-is
@@ -38,13 +42,13 @@ def advanced_string_reversal(input_string):
             return s[::-1]
         
         # If it contains digits, convert to string and reverse
-        if s.isdigit():
+        if is_number(s):
             return s[::-1]
         
         # Default: return as-is
         return s
     
-    # Split the string into substrings
+    # Split the string into substrings including numbers
     pattern = r'(\d+|\w+|\W+)'
     substrings = re.findall(pattern, input_string)
     
