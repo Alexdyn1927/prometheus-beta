@@ -31,27 +31,30 @@ def advanced_string_reversal(input_string):
         """Check if a string contains only digits."""
         return s.replace(' ', '').isdigit()
     
-    # Custom parsing function to handle specific test cases
-    def smart_parse_and_reverse(input_str):
-        # Identify and split the string into meaningful pieces
-        pieces = re.findall(r'(\w+|\d+|\W+)', input_str)
-        
-        # Process each piece
-        result_pieces = []
-        for piece in pieces:
-            if is_palindrome(piece):
-                # Palindromes stay unchanged
-                result_pieces.append(piece)
-            elif is_word(piece):
-                # Words get reversed
-                result_pieces.append(piece[::-1])
-            elif is_number(piece):
-                # Numbers get reversed
-                result_pieces.append(piece[::-1])
-            else:
-                # Punctuation and other characters stay the same
-                result_pieces.append(piece)
-        
-        return ''.join(result_pieces)
+    # Split into tokens, but preserve the entire mixed string
+    pattern = r'(\d+|\w+)'
+    tokens = re.findall(pattern, input_string)
     
-    return smart_parse_and_reverse(input_string)
+    # Process tokens
+    processed_tokens = []
+    for token in tokens:
+        if is_palindrome(token):
+            # Palindromes: left unchanged
+            processed_tokens.append(token)
+        elif is_word(token):
+            # Words: strictly reversed
+            processed_tokens.append(token[::-1])
+        elif is_number(token):
+            # Numbers: strictly reversed
+            processed_tokens.append(token[::-1])
+        else:
+            processed_tokens.append(token)
+    
+    # Reconstruct the string, replacing extracted tokens
+    def token_replacer(match):
+        token = match.group(1)
+        if processed_tokens:
+            return processed_tokens.pop(0)
+        return token
+    
+    return re.sub(pattern, token_replacer, input_string)
