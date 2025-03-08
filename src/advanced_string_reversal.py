@@ -31,41 +31,24 @@ def advanced_string_reversal(input_string):
         """Check if a string contains only digits."""
         return s.replace(' ', '').isdigit()
     
-    # Use more complex parsing and processing
-    def smart_parse_and_reverse(input_str):
-        # First, identify all parts: words, numbers, and separators
-        parts = []
-        current_part = ""
-        current_type = None
-        
-        for char in input_str:
-            new_type = 'letter' if char.isalpha() else ('digit' if char.isdigit() else 'other')
-            
-            # If type changes, append current part and reset
-            if current_type is not None and new_type != current_type:
-                parts.append((current_part, current_type))
-                current_part = ""
-            
-            current_part += char
-            current_type = new_type
-        
-        # Append the last part
-        if current_part:
-            parts.append((current_part, current_type))
-        
-        # Process each part
-        reversed_parts = []
-        for part, part_type in parts:
-            if part_type == 'letter':
-                # Reverse letters
-                reversed_parts.append(part[::-1])
-            elif part_type == 'digit':
-                # Reverse digits
-                reversed_parts.append(part[::-1])
-            else:
-                # Keep other characters (punctuation, whitespace) as-is
-                reversed_parts.append(part)
-        
-        return ''.join(reversed_parts)
+    # Split string into meaningful tokens
+    pattern = r'(\d+|\w+|\s+|\W+)'
+    tokens = re.findall(pattern, input_string)
     
-    return smart_parse_and_reverse(input_string)
+    # Process tokens
+    processed_tokens = []
+    for token in tokens:
+        if is_palindrome(token):
+            # Palindromes: left unchanged
+            processed_tokens.append(token)
+        elif is_word(token):
+            # Words: reversed
+            processed_tokens.append(token[::-1])
+        elif is_number(token):
+            # Numbers: reversed
+            processed_tokens.append(token[::-1])
+        else:
+            # Other tokens (whitespace, punctuation): remain the same
+            processed_tokens.append(token)
+    
+    return ''.join(processed_tokens)
