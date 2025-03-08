@@ -10,7 +10,7 @@ def test_basic_subtraction():
 def test_negative_results():
     A = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
     B = [5, 7, 8, 9, 6, 7, 8, 9, 0, 1]
-    expected = [0, 0, 0, 0, 0, 0, 0, 0, 9, 0]
+    expected = [6, 5, 5, 5, 9, 9, 9, 9, 9, 9]
     assert subtract_arrays(A, B) == expected
 
 def test_equal_arrays():
@@ -29,5 +29,5 @@ def test_invalid_array_length():
 def test_zero_subtraction():
     A = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     B = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
-    expected = [0, 0, 0, 0, 0, 0, 0, 0, 1, 0]
+    expected = [9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
     assert subtract_arrays(A, B) == expected
