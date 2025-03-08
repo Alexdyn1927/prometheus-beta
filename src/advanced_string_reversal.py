@@ -25,11 +25,11 @@ def advanced_string_reversal(input_string):
     
     def is_word(s):
         """Check if a string contains only letters."""
-        return s.isalpha()
+        return s.replace(' ', '').isalpha()
     
     def is_number(s):
         """Check if a string contains only digits."""
-        return s.isdigit()
+        return s.replace(' ', '').isdigit()
     
     def reverse_substring(s):
         """Reverse a substring based on its characteristics."""
@@ -37,7 +37,7 @@ def advanced_string_reversal(input_string):
         if is_palindrome(s):
             return s
         
-        # If it's a word, reverse the individual word
+        # If it's a word, return the reversed word
         if is_word(s):
             return s[::-1]
         
@@ -48,33 +48,9 @@ def advanced_string_reversal(input_string):
         # Default: return as-is
         return s
     
-    # Split the string into substrings while preserving separators
-    def custom_split(s):
-        parts = []
-        current_part = ""
-        last_type = None
-        
-        for char in s:
-            current_type = 'word' if char.isalpha() else ('digit' if char.isdigit() else 'other')
-            
-            # If the type changes, add the current part to parts
-            if last_type is not None and current_type != last_type:
-                if current_part:
-                    parts.append(current_part)
-                current_part = ""
-            
-            # Add the character to the current part
-            current_part += char
-            last_type = current_type
-        
-        # Add the last part
-        if current_part:
-            parts.append(current_part)
-        
-        return parts
-    
-    # Split the string
-    substrings = custom_split(input_string)
+    # Use regex to intelligently split into meaningful chunks
+    pattern = r'(\d+|\w+|\s+|\W+)'
+    substrings = re.findall(pattern, input_string)
     
     # Process each substring
     processed_substrings = [reverse_substring(substr) for substr in substrings]
