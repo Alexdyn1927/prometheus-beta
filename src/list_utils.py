@@ -27,9 +27,12 @@ def remove_duplicates(input_list):
     seen = set()
     
     for item in input_list:
+        # Check for uniqueness using a tuple of (type, value)
+        item_key = (type(item), item)
+        
         # Only add item if it hasn't been seen before
-        if item not in seen:
-            seen.add(item)
+        if item_key not in seen:
+            seen.add(item_key)
             unique_list.append(item)
     
     return unique_list
