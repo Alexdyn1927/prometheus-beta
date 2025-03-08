@@ -7,7 +7,7 @@ def test_basic_text_counting():
 
 def test_mixed_case_text():
     """Test that function works with mixed case text."""
-    assert count_vowels_consonants("HeLLo WoRLd") == (3, 6)
+    assert count_vowels_consonants("HeLLo WoRLd") == (3, 7)
 
 def test_empty_string():
     """Test that empty string returns (0, 0)."""
@@ -26,12 +26,12 @@ def test_non_alphabetic_characters():
     assert count_vowels_consonants("hello 123! @#$%") == (2, 3)
 
 def test_unicode_characters():
-    """Test that non-English characters are ignored."""
-    assert count_vowels_consonants("héllö wörld") == (2, 3)
+    """Test that non-English characters are converted to ASCII or removed."""
+    assert count_vowels_consonants("héllö wörld") == (0, 7)
 
 def test_invalid_input_type():
     """Test that a TypeError is raised for non-string input."""
     with pytest.raises(TypeError, match="Input must be a string"):
         count_vowels_consonants(123)
         count_vowels_consonants(None)
-        count_vowels_consonants(["hello"])
+        count_vowels_consonants(["hello"]))
