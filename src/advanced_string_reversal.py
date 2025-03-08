@@ -37,7 +37,7 @@ def advanced_string_reversal(input_string):
         if is_palindrome(s):
             return s
         
-        # If it's a word, reverse it
+        # If it's a word, reverse the individual word
         if is_word(s):
             return s[::-1]
         
