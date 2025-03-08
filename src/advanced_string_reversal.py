@@ -48,12 +48,21 @@ def advanced_string_reversal(input_string):
         # Default: return as-is
         return s
     
-    # More granular split to capture words, numbers, and other parts
-    pattern = r'((?:\d+)|(?:\w+)|(?:\W+))'
-    substrings = re.findall(pattern, input_string)
+    # Capture words, numbers, and other parts, ensuring order is preserved
+    sequence = re.findall(r'(\d+|\w+)', input_string)
     
-    # Process each substring
-    processed_substrings = [reverse_substring(substr) for substr in substrings]
+    # Process each substring, but keep special characters in place
+    result = []
+    current_seq_index = 0
     
-    # Reconstruct the string
-    return ''.join(processed_substrings)
+    for char in input_string:
+        if char.isalnum():
+            # If it's alphanumeric, get the next sequence item and process
+            item = sequence[current_seq_index]
+            result.append(reverse_substring(item))
+            current_seq_index += 1
+        else:
+            # If it's a special character, just append it
+            result.append(char)
+    
+    return ''.join(result)
