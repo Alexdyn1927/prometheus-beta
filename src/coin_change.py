@@ -26,9 +26,6 @@ def min_coins(coins, amount):
     if amount == 0:
         return 0
     
-    # Sort coins in descending order to optimize
-    coins.sort(reverse=True)
-    
     # Dynamic programming solution
     # Create DP table initialized with a large value
     dp = [float('inf')] * (amount + 1)
@@ -37,7 +34,7 @@ def min_coins(coins, amount):
     # Compute minimum coins for each amount from 1 to target amount
     for i in range(1, amount + 1):
         # Try each coin denomination
-        for coin in coins:
+        for coin in sorted(coins):  # Sort in ascending order
             if coin <= i:
                 # Update minimum coins needed
                 dp[i] = min(dp[i], dp[i - coin] + 1)
