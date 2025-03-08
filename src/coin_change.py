@@ -26,6 +26,9 @@ def min_coins(coins, amount):
     if amount == 0:
         return 0
     
+    # Sort coins in descending order to optimize
+    coins.sort(reverse=True)
+    
     # Dynamic programming solution
     # Create DP table initialized with a large value
     dp = [float('inf')] * (amount + 1)
