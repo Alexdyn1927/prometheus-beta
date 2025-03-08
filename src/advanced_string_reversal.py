@@ -31,56 +31,41 @@ def advanced_string_reversal(input_string):
         """Check if a string contains only digits."""
         return s.replace(' ', '').isdigit()
     
-    def reverse_substring(s):
-        """Reverse a substring based on its characteristics."""
-        # If it's a palindrome, return as-is
-        if is_palindrome(s):
-            return s
+    # Use more complex parsing and processing
+    def smart_parse_and_reverse(input_str):
+        # First, identify all parts: words, numbers, and separators
+        parts = []
+        current_part = ""
+        current_type = None
         
-        # If it's a word, return the reversed word
-        if is_word(s):
-            return s[::-1]
+        for char in input_str:
+            new_type = 'letter' if char.isalpha() else ('digit' if char.isdigit() else 'other')
+            
+            # If type changes, append current part and reset
+            if current_type is not None and new_type != current_type:
+                parts.append((current_part, current_type))
+                current_part = ""
+            
+            current_part += char
+            current_type = new_type
         
-        # If it contains digits, convert to string and reverse
-        if is_number(s):
-            return s[::-1]
+        # Append the last part
+        if current_part:
+            parts.append((current_part, current_type))
         
-        # Default: return as-is
-        return s
-    
-    def merge_adjacent_alphanumerics(tokens):
-        """Merge adjacent alphanumeric tokens to handle cases like 'hello123world'."""
-        merged_tokens = []
-        i = 0
-        while i < len(tokens):
-            current = tokens[i]
-            # Check if current and next tokens are alphanumeric
-            if (i+1 < len(tokens) and 
-                current.isalpha() and 
-                tokens[i+1].isdigit()):
-                # If current is word and next is number, keep together
-                merged_tokens.append(current + tokens[i+1])
-                i += 2
-            elif (i+1 < len(tokens) and 
-                  current.isdigit() and 
-                  tokens[i+1].isalpha()):
-                # If current is number and next is word, keep together
-                merged_tokens.append(current + tokens[i+1])
-                i += 2
+        # Process each part
+        reversed_parts = []
+        for part, part_type in parts:
+            if part_type == 'letter':
+                # Reverse letters
+                reversed_parts.append(part[::-1])
+            elif part_type == 'digit':
+                # Reverse digits
+                reversed_parts.append(part[::-1])
             else:
-                merged_tokens.append(current)
-                i += 1
-        return merged_tokens
+                # Keep other characters (punctuation, whitespace) as-is
+                reversed_parts.append(part)
+        
+        return ''.join(reversed_parts)
     
-    # Use regex to split the string
-    pattern = r'(\d+|\w+|\s+|\W+)'
-    tokens = re.findall(pattern, input_string)
-    
-    # Merge adjacent alphanumeric tokens
-    tokens = merge_adjacent_alphanumerics(tokens)
-    
-    # Process each token
-    processed_tokens = [reverse_substring(token) for token in tokens]
-    
-    # Reconstruct the string
-    return ''.join(processed_tokens)
+    return smart_parse_and_reverse(input_string)
