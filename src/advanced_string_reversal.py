@@ -48,12 +48,39 @@ def advanced_string_reversal(input_string):
         # Default: return as-is
         return s
     
-    # Use regex to intelligently split into meaningful chunks
-    pattern = r'(\d+|\w+|\s+|\W+)'
-    substrings = re.findall(pattern, input_string)
+    def merge_adjacent_alphanumerics(tokens):
+        """Merge adjacent alphanumeric tokens to handle cases like 'hello123world'."""
+        merged_tokens = []
+        i = 0
+        while i < len(tokens):
+            current = tokens[i]
+            # Check if current and next tokens are alphanumeric
+            if (i+1 < len(tokens) and 
+                current.isalpha() and 
+                tokens[i+1].isdigit()):
+                # If current is word and next is number, keep together
+                merged_tokens.append(current + tokens[i+1])
+                i += 2
+            elif (i+1 < len(tokens) and 
+                  current.isdigit() and 
+                  tokens[i+1].isalpha()):
+                # If current is number and next is word, keep together
+                merged_tokens.append(current + tokens[i+1])
+                i += 2
+            else:
+                merged_tokens.append(current)
+                i += 1
+        return merged_tokens
     
-    # Process each substring
-    processed_substrings = [reverse_substring(substr) for substr in substrings]
+    # Use regex to split the string
+    pattern = r'(\d+|\w+|\s+|\W+)'
+    tokens = re.findall(pattern, input_string)
+    
+    # Merge adjacent alphanumeric tokens
+    tokens = merge_adjacent_alphanumerics(tokens)
+    
+    # Process each token
+    processed_tokens = [reverse_substring(token) for token in tokens]
     
     # Reconstruct the string
-    return ''.join(processed_substrings)
+    return ''.join(processed_tokens)
