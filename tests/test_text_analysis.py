@@ -34,4 +34,4 @@ def test_invalid_input_type():
     with pytest.raises(TypeError, match="Input must be a string"):
         count_vowels_consonants(123)
         count_vowels_consonants(None)
-        count_vowels_consonants(["hello"]))
+        count_vowels_consonants(["hello"])
