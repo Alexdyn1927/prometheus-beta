@@ -28,6 +28,17 @@ def count_vowels_consonants(text):
 
     # Count vowels and consonants
     for char in text:
+        # Skip spaces and replace non-ASCII characters with their ASCII equivalent if possible
+        try:
+            # Convert to ASCII equivalent if possible
+            char = char.encode('ascii', 'ignore').decode('ascii')
+            
+            # If character is now empty, skip it
+            if not char:
+                continue
+        except (UnicodeEncodeError, UnicodeDecodeError):
+            continue
+
         # Only count alphabetic characters
         if char.isalpha():
             if char in vowels:
