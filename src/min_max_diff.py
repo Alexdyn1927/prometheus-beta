@@ -15,9 +15,12 @@ def find_min_max_difference(number_string: str) -> int:
     if not number_string:
         raise ValueError("Input string cannot be empty")
 
-    # Split the string and convert to integers
+    # Split the string
+    split_numbers = number_string.split(',')
+
+    # Convert to integers, filtering out empty strings
     try:
-        numbers = [int(num.strip()) for num in number_string.split(',')]
+        numbers = [int(num.strip()) for num in split_numbers if num.strip()]
     except ValueError:
         raise ValueError("Input must be a comma-separated string of integers")
 
