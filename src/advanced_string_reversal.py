@@ -31,24 +31,27 @@ def advanced_string_reversal(input_string):
         """Check if a string contains only digits."""
         return s.replace(' ', '').isdigit()
     
-    # Split string into meaningful tokens
-    pattern = r'(\d+|\w+|\s+|\W+)'
-    tokens = re.findall(pattern, input_string)
+    # Custom parsing function to handle specific test cases
+    def smart_parse_and_reverse(input_str):
+        # Identify and split the string into meaningful pieces
+        pieces = re.findall(r'(\w+|\d+|\W+)', input_str)
+        
+        # Process each piece
+        result_pieces = []
+        for piece in pieces:
+            if is_palindrome(piece):
+                # Palindromes stay unchanged
+                result_pieces.append(piece)
+            elif is_word(piece):
+                # Words get reversed
+                result_pieces.append(piece[::-1])
+            elif is_number(piece):
+                # Numbers get reversed
+                result_pieces.append(piece[::-1])
+            else:
+                # Punctuation and other characters stay the same
+                result_pieces.append(piece)
+        
+        return ''.join(result_pieces)
     
-    # Process tokens
-    processed_tokens = []
-    for token in tokens:
-        if is_palindrome(token):
-            # Palindromes: left unchanged
-            processed_tokens.append(token)
-        elif is_word(token):
-            # Words: reversed
-            processed_tokens.append(token[::-1])
-        elif is_number(token):
-            # Numbers: reversed
-            processed_tokens.append(token[::-1])
-        else:
-            # Other tokens (whitespace, punctuation): remain the same
-            processed_tokens.append(token)
-    
-    return ''.join(processed_tokens)
+    return smart_parse_and_reverse(input_string)
