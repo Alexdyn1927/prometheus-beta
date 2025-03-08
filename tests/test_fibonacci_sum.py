@@ -12,7 +12,7 @@ def test_fibonacci_sum_basic_cases():
 def test_fibonacci_sum_larger_numbers():
     """Test Fibonacci sum for larger number of terms."""
     assert fibonacci_sum(10) == 88, "Sum of first 10 Fibonacci numbers should be 88"
-    assert fibonacci_sum(15) == 1597, "Sum of first 15 Fibonacci numbers should be 1597"
+    assert fibonacci_sum(15) == 986, "Sum of first 15 Fibonacci numbers should be 986"
 
 def test_fibonacci_sum_invalid_inputs():
     """Test error handling for invalid inputs."""
