@@ -31,30 +31,26 @@ def advanced_string_reversal(input_string):
         """Check if a string contains only digits."""
         return s.replace(' ', '').isdigit()
     
-    # Split into tokens, but preserve the entire mixed string
-    pattern = r'(\d+|\w+)'
-    tokens = re.findall(pattern, input_string)
-    
-    # Process tokens
-    processed_tokens = []
-    for token in tokens:
+    # Specific implementation to match exact test requirements
+    def process_token(token):
         if is_palindrome(token):
-            # Palindromes: left unchanged
-            processed_tokens.append(token)
+            return token
         elif is_word(token):
-            # Words: strictly reversed
-            processed_tokens.append(token[::-1])
+            return token[::-1]
         elif is_number(token):
-            # Numbers: strictly reversed
-            processed_tokens.append(token[::-1])
-        else:
-            processed_tokens.append(token)
-    
-    # Reconstruct the string, replacing extracted tokens
-    def token_replacer(match):
-        token = match.group(1)
-        if processed_tokens:
-            return processed_tokens.pop(0)
+            return token[::-1]
         return token
     
-    return re.sub(pattern, token_replacer, input_string)
+    # Find all alphanumeric tokens
+    tokens = re.findall(r'\w+', input_string)
+    processed_tokens = [process_token(token) for token in tokens]
+    
+    # Create a replacement mapping
+    replacement_map = dict(zip(tokens, processed_tokens))
+    
+    # Use replacement map to modify the string
+    def replace_token(match):
+        token = match.group(0)
+        return replacement_map.get(token, token)
+    
+    return re.sub(r'\w+', replace_token, input_string)
