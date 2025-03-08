@@ -29,7 +29,7 @@ def test_edge_cases():
 
 def test_non_string_input():
     """Ensure the function handles non-string inputs appropriately."""
-    with pytest.raises(AttributeError):
+    with pytest.raises(TypeError):
         is_palindrome(None)
-    with pytest.raises(AttributeError):
+    with pytest.raises(TypeError):
         is_palindrome(123)
