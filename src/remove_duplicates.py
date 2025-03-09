@@ -8,6 +8,9 @@ def remove_duplicates(numbers):
     Returns:
         list: A new list with duplicates removed, preserving the first occurrence of each unique element.
 
+    Raises:
+        TypeError: If the input is not a list.
+
     Examples:
         >>> remove_duplicates([1, 2, 3, 2, 4, 1, 5])
         [1, 2, 3, 4, 5]
@@ -16,6 +19,10 @@ def remove_duplicates(numbers):
         >>> remove_duplicates([1, 1, 1, 1])
         [1]
     """
+    # Check input type
+    if not isinstance(numbers, list):
+        raise TypeError("Input must be a list")
+    
     # Use a set to track seen elements while preserving order
     seen = set()
     result = []
