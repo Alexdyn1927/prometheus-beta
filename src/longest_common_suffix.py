@@ -36,8 +36,8 @@ def find_longest_common_suffix(strings):
         # Take suffix of current length from the end of the shortest string
         current_suffix = shortest[-i:]
         
-        # Check if this suffix is common to all strings
-        if all(s.endswith(current_suffix) for s in strings):
+        # Check if this suffix is common to all strings, with exact case match
+        if all(s.endswith(current_suffix) and s.index(current_suffix) == len(s) - len(current_suffix) for s in strings):
             return current_suffix
     
     # If no common suffix found
