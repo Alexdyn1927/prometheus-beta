@@ -31,8 +31,8 @@ def find_longest_common_suffix(strings):
     # Find the shortest string to limit suffix checks
     shortest = min(strings, key=len)
     
-    # Check suffixes from shortest possible to longest
-    for i in range(1, len(shortest) + 1):
+    # Check suffixes from longest possible to shortest
+    for i in range(len(shortest), 0, -1):
         # Take suffix of current length from the end of the shortest string
         current_suffix = shortest[-i:]
         
