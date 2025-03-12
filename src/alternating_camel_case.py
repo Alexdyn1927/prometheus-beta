@@ -74,9 +74,7 @@ def to_alternating_camel_case(text: str) -> str:
         # Add remaining words
         result += ''.join(word.capitalize() for word in sorted_words)
     
-    # Add numeric words if not already added
-    for num_word in numeric_words:
-        if num_word not in words[0:1]:
-            result += num_word
+    # Add numeric words at the end for special cases
+    result += ''.join(num_word for num_word in numeric_words if num_word not in words[0:1])
     
     return result
