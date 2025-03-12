@@ -31,3 +31,19 @@ def test_invalid_input():
         create_palindrome_mirror(123)
         create_palindrome_mirror(None)
         create_palindrome_mirror(["not", "a", "string"])
+
+def test_palindrome_mirror_calculation():
+    """Test the palindrome mirror creation logic."""
+    def palindrome_mirror(s):
+        return s + s[::-1]
+    
+    test_cases = [
+        "abc",
+        "hello",
+        "123",
+        "!@#",
+        ""
+    ]
+    
+    for case in test_cases:
+        assert create_palindrome_mirror(case) == palindrome_mirror(case)
