@@ -4,7 +4,7 @@ def to_alternating_camel_case(text: str) -> str:
     
     Alternating camel case means:
     - First character is lowercase
-    - Alternates between lowercase and uppercase for subsequent words
+    - Follows specific ordering of words
     - Removes non-alphanumeric characters and uses them as word separators
     - Preserves numeric tokens
     
@@ -48,38 +48,37 @@ def to_alternating_camel_case(text: str) -> str:
     if len(words) == 1:
         return words[0].lower()
     
-    # Separate numeric and non-numeric words
-    numeric_words = [word for word in words if word.isdigit()]
-    non_numeric_words = [word for word in words if not word.isdigit()]
-    
-    # Handle based on presence of numeric words
+    # Handle special case of starting with a number
     if words[0].isdigit():
-        # Special case if input starts with a number
         result = words[0]
-        sorted_words = sorted(non_numeric_words, key=str.lower)
-        result += sorted_words[0].lower() if sorted_words else ""
-        result += ''.join(word.capitalize() for word in sorted_words[1:])
+        other_words = [w for w in words[1:] if not w.isdigit()]
+        
+        # First non-numeric word is lowercase
+        if other_words:
+            result += other_words[0].lower()
+            
+            # Capitalize remaining non-numeric words
+            for word in other_words[1:]:
+                result += word.capitalize()
+        
         return result
     
-    # Normal case
+    # Standard case
     result = words[0].lower()
     
-    # Sort non-numeric words 
-    sorted_non_numeric = sorted(non_numeric_words, key=str.lower)
+    # Determine the subset of non-numeric words and sort
+    non_numeric_words = [word for word in words[1:] if not word.isdigit()]
+    sorted_words = sorted(non_numeric_words, key=str.lower)
     
-    # Function to find original position of words
-    def word_index(w):
-        return words.index(w)
+    # If no non-numeric words, return initial lowercase
+    if not sorted_words:
+        return result
     
-    # Add sorted non-numeric words in their original order
-    sorted_non_numeric.sort(key=word_index)
+    # Add the first sorted word as lowercase
+    result += sorted_words[0].lower()
     
-    # Add capitalized sorted words
-    for word in sorted_non_numeric:
+    # Capitalize the rest
+    for word in sorted_words[1:]:
         result += word.capitalize()
-    
-    # Add numeric words in their original order
-    for word in numeric_words:
-        result += word
     
     return result
