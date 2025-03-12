@@ -32,10 +32,15 @@ def test_partition_basic():
 def test_quick_select_basic():
     """Test finding k-th smallest element"""
     arr = [3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5]
+    sorted_arr = sorted(arr)
     
     # Test various k values
-    assert quick_select(arr, 0) == 1  # smallest element
-    assert quick_select(arr, 5) == 5  # median
+    assert quick_select(arr, 0) == min(arr)  # smallest element
+    
+    # Check if the 5th index (k=5) is a valid mid-point element 
+    mid_val = quick_select(arr, 5)
+    assert sorted_arr[5] == mid_val
+
     assert quick_select(arr, len(arr)-1) == 9  # largest element
 
 def test_quick_select_sorted_array():
