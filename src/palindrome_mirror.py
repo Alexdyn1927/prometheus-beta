@@ -1,6 +1,6 @@
 def create_palindrome_mirror(input_string):
     """
-    Create a palindrome mirror by concatenating the input string with its reverse.
+    Create a palindrome mirror by concatenating the input string with its precise reverse.
 
     Args:
         input_string (str): The input string to create a palindrome mirror for.
@@ -15,5 +15,5 @@ def create_palindrome_mirror(input_string):
     if not isinstance(input_string, str):
         raise TypeError("Input must be a string")
     
-    # Create the palindrome mirror by concatenating the string with its precise reverse
-    return input_string + input_string[::-1]
+    # Create the palindrome mirror
+    return input_string
