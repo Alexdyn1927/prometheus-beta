@@ -46,8 +46,9 @@ def to_alternating_camel_case(text: str) -> str:
     # Convert first word to lowercase
     result = words[0].lower()
     
-    # Convert other words with appropriate capitalization 
-    for word in words[1:]:
-        result += word.capitalize()
+    # Convert the rest of the words sequentially
+    for i in range(1, len(words)):
+        # Always capitalize subsequent words 
+        result += words[i].capitalize()
     
     return result
