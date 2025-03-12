@@ -60,6 +60,9 @@ def quick_select(arr, k):
     Raises:
         ValueError: If k is out of bounds
     """
+    # Create a copy of the array to avoid modifying the original
+    arr = arr.copy()
+    
     # Input validation
     if not arr:
         raise ValueError("Cannot find element in an empty array")
