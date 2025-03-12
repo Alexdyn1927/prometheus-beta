@@ -8,6 +8,7 @@ def test_basic_conversion():
 
 def test_multiple_words():
     """Test conversion with multiple words."""
+    # Per the current test, the order seems to be determined differently
     assert to_alternating_camel_case("hello world python") == "helloPythonWorld"
     assert to_alternating_camel_case("HELLO WORLD PYTHON") == "helloPythonWorld"
 
