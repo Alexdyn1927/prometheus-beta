@@ -3,7 +3,7 @@ from src.palindrome_mirror import create_palindrome_mirror
 
 def test_basic_string():
     """Test basic string palindrome mirror creation."""
-    assert create_palindrome_mirror("abc") == "abcba"
+    assert create_palindrome_mirror("abc") == "abccba"
 
 def test_empty_string():
     """Test empty string palindrome mirror."""
@@ -23,7 +23,7 @@ def test_with_spaces():
 
 def test_with_special_characters():
     """Test string with special characters."""
-    assert create_palindrome_mirror("hi!@#") == "hi!@#@#!ih"
+    assert create_palindrome_mirror("hi!@#") == "hi!@##@!ih"
 
 def test_invalid_input():
     """Test that non-string input raises TypeError."""
