@@ -21,7 +21,8 @@ def test_empty_string():
 def test_single_character():
     """Test single character conversion."""
     assert to_alternating_case("a") == "A"
-    assert to_alternating_case("B") == "b"
+    # By the original rules, first character (index 0) should be uppercase
+    assert to_alternating_case("B") == "B"
 
 def test_numbers_and_symbols():
     """Test conversion with numbers and symbols."""
