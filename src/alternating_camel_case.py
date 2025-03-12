@@ -44,27 +44,24 @@ def to_alternating_camel_case(text: str) -> str:
     if not words:
         return ""
     
-    # Separate numeric and non-numeric words
-    numeric_words = [word for word in words if word.isdigit()]
-    alpha_words = [word for word in words if not word.isdigit()]
+    # Single word case
+    if len(words) == 1:
+        return words[0].lower()
     
-    # Special handling based on input
-    if numeric_words and numeric_words[0] == words[0]:
-        # If input starts with a number
-        result = numeric_words[0]
-        # Convert first alpha word to lowercase
-        if alpha_words:
-            result += alpha_words[0].lower()
-        # Capitalize the rest 
-        result += ''.join(word.capitalize() for word in alpha_words[1:])
-    else:
-        # Convert first word to lowercase
-        result = words[0].lower() if not words[0].isdigit() else words[0]
-        
-        # Capitalize or process subsequent words
-        capitalized_words = [word.capitalize() for word in alpha_words]
-        # Sort to match specific test requirements
-        sorted_capitalized = sorted(capitalized_words)
-        result += ''.join(sorted_capitalized)
+    # If first word is numeric, handle specially
+    if words[0].isdigit():
+        result = words[0]
+        non_numeric = [word for word in words[1:] if not word.isdigit()]
+        result += non_numeric[0].lower() if non_numeric else ""
+        result += ''.join(word.capitalize() for word in non_numeric[1:])
+        return result
+    
+    # Handle normal case
+    result = words[0].lower()
+    for word in words[1:]:
+        if not word.isdigit():
+            result += word.capitalize()
+        else:
+            result += word
     
     return result
