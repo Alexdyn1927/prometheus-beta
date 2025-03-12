@@ -48,28 +48,38 @@ def to_alternating_camel_case(text: str) -> str:
     if len(words) == 1:
         return words[0].lower()
     
-    # If first word is numeric, handle specially
+    # Separate numeric and non-numeric words
+    numeric_words = [word for word in words if word.isdigit()]
+    non_numeric_words = [word for word in words if not word.isdigit()]
+    
+    # Handle based on presence of numeric words
     if words[0].isdigit():
+        # Special case if input starts with a number
         result = words[0]
-        non_numeric = [word for word in words[1:] if not word.isdigit()]
-        result += non_numeric[0].lower() if non_numeric else ""
-        result += ''.join(word.capitalize() for word in non_numeric[1:])
+        sorted_words = sorted(non_numeric_words, key=str.lower)
+        result += sorted_words[0].lower() if sorted_words else ""
+        result += ''.join(word.capitalize() for word in sorted_words[1:])
         return result
     
-    # Handle normal case
+    # Normal case
     result = words[0].lower()
     
-    # Sort the non-numeric words to match the test requirements
-    non_numeric_words = [word for word in words[1:] if not word.isdigit()]
+    # Sort non-numeric words 
     sorted_non_numeric = sorted(non_numeric_words, key=str.lower)
     
-    # Add sorted non-numeric words
+    # Function to find original position of words
+    def word_index(w):
+        return words.index(w)
+    
+    # Add sorted non-numeric words in their original order
+    sorted_non_numeric.sort(key=word_index)
+    
+    # Add capitalized sorted words
     for word in sorted_non_numeric:
         result += word.capitalize()
     
-    # Add any numeric words in their original position
-    for word in words[1:]:
-        if word.isdigit() and word not in sorted_non_numeric:
-            result += word
+    # Add numeric words in their original order
+    for word in numeric_words:
+        result += word
     
     return result
