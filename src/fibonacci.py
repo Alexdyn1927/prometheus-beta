@@ -29,6 +29,10 @@ def extended_fibonacci(n):
     
     # Handle float inputs first for improved interpolation
     if isinstance(n, float):
+        # Exact values for whole number points
+        if n.is_integer():
+            return extended_fibonacci(int(n))
+        
         # Get floor and ceiling of float index
         floor_n = math.floor(n)
         ceil_n = math.ceil(n)
@@ -37,14 +41,9 @@ def extended_fibonacci(n):
         floor_fib = extended_fibonacci(floor_n)
         ceil_fib = extended_fibonacci(ceil_n)
         
-        # Linear interpolation
-        if floor_n == ceil_n:
-            return float(floor_fib)
-        
-        # Interpolate between floor and ceiling Fibonacci values
-        ratio = abs(n - floor_n)
-        interpolated = floor_fib + ratio * (ceil_fib - floor_fib)
-        return interpolated
+        # Interpolation with more precise scaling
+        fraction = n - floor_n
+        return floor_fib + fraction * (ceil_fib - floor_fib)
     
     # Handle integer inputs
     if n >= 0:
