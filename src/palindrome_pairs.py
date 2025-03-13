@@ -28,7 +28,8 @@ def find_palindrome_word_pair_indices(words):
             
             # Check if words[i] reversed + words[j] forms a palindrome
             if is_palindrome(words[i] + words[j]):
-                palindrome_indices.append((i, j))
+                if (i, j) not in palindrome_indices:
+                    palindrome_indices.append((i, j))
     
     return palindrome_indices
 
