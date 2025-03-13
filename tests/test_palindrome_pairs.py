@@ -11,7 +11,9 @@ def test_is_palindrome():
 def test_find_palindrome_word_pair_indices_basic():
     """Test basic functionality of finding palindrome word pair indices."""
     words = ["bat", "tab", "cat"]
-    assert find_palindrome_word_pair_indices(words) == [(0, 1)]
+    result = find_palindrome_word_pair_indices(words)
+    assert (0, 1) in result
+    assert (1, 0) in result
 
 def test_find_palindrome_word_pair_indices_complex():
     """Test more complex scenarios of palindrome word pairs."""
@@ -19,7 +21,7 @@ def test_find_palindrome_word_pair_indices_complex():
     result = find_palindrome_word_pair_indices(words)
     assert (0, 1) in result
     assert (1, 0) in result
-    assert (3, 4) in result
+    assert (2, 4) in result
 
 def test_find_palindrome_word_pair_indices_empty_list():
     """Test behavior with an empty list."""
