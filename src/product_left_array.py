@@ -34,28 +34,10 @@ def product_left_elements(numbers):
     result = [1] * len(numbers)
     
     # Compute product of left elements
-    zero_index = -1
-    product = 1
-    
-    # First go through and track the first zero index
-    for i in range(len(numbers)):
-        if numbers[i] == 0:
-            if zero_index == -1:
-                zero_index = i
-            break
-        result[i] = product
-        product *= numbers[i]
-    
-    # Handle zero cases
-    if zero_index != -1:
-        # Set everything after first zero to 0
-        result[zero_index] = 0
-        for j in range(zero_index + 1, len(numbers)):
-            result[j] = 0
-    
-    # If no zero found, continue calculating the rest
-    if zero_index == -1:
-        for i in range(len(numbers)):
-            result[i] = product // numbers[i]
+    left_product = 1
+    for i in range(1, len(numbers)):
+        # Multiply by the previous left element
+        left_product *= numbers[i-1]
+        result[i] = left_product
     
     return result
