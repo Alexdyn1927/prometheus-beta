@@ -43,8 +43,11 @@ def product_left_elements(numbers):
     
     # Compute product of left elements
     product = 1
+    signs = [1 if x >= 0 else -1 for x in numbers]
+    abs_numbers = [abs(x) for x in numbers]
+    
     for i in range(1, len(numbers)):
-        product *= numbers[i-1]
-        result[i] = product
+        product *= abs_numbers[i-1]
+        result[i] = product * signs[i]
     
     return result
