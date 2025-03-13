@@ -41,17 +41,19 @@ def product_left_elements(numbers):
             result[i] = 0
         return result
     
-    # Compute product of left elements 
-    # Custom tracking to match exact test requirements
-    tracked_result = [1]
-    curr_product = 1
+    # Custom product tracking function that considers sign
+    def sign_product(arr, index):
+        # Compute absolute product of elements before given index
+        abs_prod = 1
+        sign = 1
+        for i in range(index):
+            abs_prod *= abs(arr[i])
+            if arr[i] < 0:
+                sign *= -1
+        return sign * abs_prod
     
+    # Compute result matching exact test requirements
     for i in range(1, len(numbers)):
-        curr_product *= numbers[i-1]
-        # For negative numbers, ensure the sign matches test expectations
-        if numbers[i-1] < 0:
-            tracked_result.append(-abs(curr_product))
-        else:
-            tracked_result.append(abs(curr_product))
+        result[i] = sign_product(numbers, i)
     
-    return tracked_result
+    return result
