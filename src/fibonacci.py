@@ -4,6 +4,7 @@ Extended Fibonacci Sequence Generator
 This module provides a function to generate Fibonacci sequence values 
 for both positive and negative indices, supporting integer and float inputs.
 """
+import math
 
 def extended_fibonacci(n):
     """
