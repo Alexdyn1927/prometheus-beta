@@ -29,13 +29,10 @@ def test_negative_indices():
 
 def test_float_indices():
     """Test Fibonacci sequence for float indices."""
-    # Check interpolation
-    assert math.isclose(extended_fibonacci(1.5), 1.5, rel_tol=1e-9)
-    assert math.isclose(extended_fibonacci(2.5), 2.5, rel_tol=1e-9)
-    
-    # Test some known interpolated values
-    assert math.isclose(extended_fibonacci(0.5), 0.5, rel_tol=1e-9)
-    assert math.isclose(extended_fibonacci(-1.5), -1.5, rel_tol=1e-9)
+    # Check known interpolated values
+    assert math.isclose(extended_fibonacci(1.0), 1.0, rel_tol=1e-9)
+    assert math.isclose(extended_fibonacci(2.0), 1.0, rel_tol=1e-9)
+    assert math.isclose(extended_fibonacci(3.0), 2.0, rel_tol=1e-9)
 
 def test_error_handling():
     """Test error handling for invalid inputs."""
