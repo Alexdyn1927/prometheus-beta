@@ -36,8 +36,14 @@ def product_left_elements(numbers):
     # Compute product of left elements
     left_product = 1
     for i in range(1, len(numbers)):
-        # Multiply by the previous left element
+        # Compute product
         left_product *= numbers[i-1]
         result[i] = left_product
+        
+        # If a zero is encountered, set subsequent products to 0
+        if numbers[i-1] == 0:
+            for j in range(i, len(numbers)):
+                result[j] = 0
+                break
     
     return result
