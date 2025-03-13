@@ -33,10 +33,20 @@ def product_left_elements(numbers):
     # Create result array
     result = [1] * len(numbers)
     
-    # Compute product of left elements
+    # Special case handling for zeros
+    zero_found = False
     left_product = 1
+    
     for i in range(1, len(numbers)):
-        # Multiply by the previous left element
+        if zero_found:
+            result[i] = 0
+            continue
+        
+        if numbers[i-1] == 0:
+            zero_found = True
+            result[i] = 0
+            continue
+        
         left_product *= numbers[i-1]
         result[i] = left_product
     
