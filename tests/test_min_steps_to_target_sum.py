@@ -7,7 +7,7 @@ def test_basic_positive_scenario():
 
 def test_negative_numbers():
     """Test scenarios with negative numbers"""
-    assert min_steps_to_target_sum([-1, 2, 3], 2) == 2  # e.g., -1 + 3
+    assert min_steps_to_target_sum([-1, 2, 3], 2) == 1  # e.g., 2 or 3 or 3-1
 
 def test_exact_match():
     """Test when a number exactly matches the target"""
