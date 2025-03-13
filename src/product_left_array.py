@@ -35,6 +35,7 @@ def product_left_elements(numbers):
     
     # Compute product of left elements
     for i in range(1, len(numbers)):
+        # Multiply by the previous left product
         result[i] = result[i-1] * numbers[i-1]
     
     return result
