@@ -27,7 +27,7 @@ def test_repeated_characters():
 def test_special_characters():
     """Test strings with special characters and whitespace."""
     assert longest_unique_substring_length("!@#$%^&*()") == 10
-    assert longest_unique_substring_length("a b c d e") == 5
+    assert longest_unique_substring_length("a b c d e") == 3  # Corrected to match actual behavior
     assert longest_unique_substring_length("  hello  ") == 4
 
 def test_unicode_characters():
